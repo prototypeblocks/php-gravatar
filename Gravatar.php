@@ -8,6 +8,9 @@ class Gravatar {
 	 * Get either a Gravatar URL or complete image tag for a specified email address.
 	 *
 	 * Method from the official Gravatar website
+	 * with a slight modification; 
+	 * Uses secure / HTTPS connection if the current 
+	 * URL / request is over HTTPS. 
 	 * 
 	 * @param string $email The email address
 	 * @param string $s Size in pixels, defaults to 80px [ 1 - 2048 ]
@@ -19,7 +22,10 @@ class Gravatar {
 	 * @source http://gravatar.com/site/implement/images/php/
 	 */
 	function get($email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts = array()) {
-	    $url = 'http://www.gravatar.com/avatar/';
+		$url = 'http://www.gravatar.com/avatar/';
+		if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+			$url = 'https://secure.gravatar.com/';
+		}
 	    $url .= md5( strtolower( trim( $email ) ) );
 	    $url .= "?s=$s&d=$d&r=$r";
 	    if ( $img ) {
